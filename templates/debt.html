@@ -1,0 +1,114 @@
+<ng-include src="plugin_url + '/templates/nav.html'"></ng-include>
+
+<div class="w3-container w3-teal variable budget_title">
+    <div class="w3-col m4 l3">
+        <h1>Debt Work Book</h1>
+    </div>
+</div>
+<h2 class="no-print">
+    <div>
+        <button class="w3-btn w3-indigo" style="float: right;" ng-click="edits=!edits" title="Shows edit forms">
+            Edit Mode
+        </button>
+        <button class="w3-btn w3-red" style="float: right;" ng-click="recalculate('account_name')" title="If JS shows infinities...">
+            (Re)-Calculate
+        </button>
+    </div>
+</h2>
+
+<div class="company-wrapper">
+    <ng-include src="plugin_url + '/templates/company_name.html'"></ng-include>
+    <div class="table-heading-sort-note">
+        <h3>Debt(s)</h3>
+        <i>(Click column heading to sort)</i>
+    </div>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th ng-click="sort('debts', 'account_number')">Debt Number</th>
+                <th ng-click="sort('debts', 'account_name')">Debt Name</th>
+                <th ng-click="sort('debts', 'today_debt')" class="r">Today Debt</th>
+                <th ng-click="sort('debts', 'monthly_due')" class="r">Monthly Due</th>
+                <th ng-click="sort('debts', 'yearly_payoff')" class="r">Projected Yearly Pay Off</th>
+                <th ng-click="sort('debts', 'interest_rate')" class="r">Interest Rate</th>
+                <th ng-click="sort('debts', 'monthly_actual')" class="r">Pay Off</th>
+                <th ng-click="sort('debts', 'balance')" class="r">Balance Debt</th>
+                <th ng-click="sort('debts', 'projected_interest')" class="r">Projected Interest</th>
+                <th class="no-print">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, debt) in debts">
+                <td>{{debt.sn}}</td>
+                <td>{{debt.account_number}}</td>
+                <td>{{debt.account_name}}</td>
+                <td class="r {{ debt.today_debt < 0 ? 'text-red' : '' }}">
+                    <span ng-hide="edits">{{debt.today_debt|currency}}</span>
+                    <input class="r i w3-input" type="text" size="8" value="{{debt.today_debt|currency}}" ng-show="edits" ng-model="debt.today_debt"
+                        ng-blur="edit(debt)" />
+                </td>
+                <td class="r {{ debt.monthly_due < 0 ? 'text-red' : '' }}">
+                    <span ng-hide="edits">{{debt.monthly_due|currency}}</span>
+                    <input class="r i w3-input" type="text" size="8" value="{{debt.monthly_due|currency}}" ng-show="edits" ng-model="debt.monthly_due"
+                        ng-blur="edit(debt)" />
+                </td>
+                <td class="r {{ debt.yearly_payoff < 0 ? 'text-red' : '' }}">
+                    <span>{{debt.yearly_payoff|currency}}</span>
+                    <!--input class="r i w3-input" type="text" size="8" value="{{debt.yearly_payoff|currency}}" ng-show="edits" ng-model="debt.yearly_payoff"
+                        ng-blur="edit(debt)" /-->
+                </td>
+                <td class="r {{ debt.interest_rate < 0 ? 'text-red' : '' }}">
+                    <span ng-hide="edits">{{debt.interest_rate|number:2}}%</span>
+                    <input class="r i w3-input" type="text" size="8" value="{{debt.interest_rate|number:2}}" ng-show="edits" ng-model="debt.interest_rate"
+                        ng-blur="edit(debt)" />
+                </td>
+                <td class="r {{ debt.monthly_actual < 0 ? 'text-red' : '' }}">{{debt.monthly_actual|currency}}</td>
+                <td class="r {{ debt.balance < 0 ? 'text-red' : '' }}">{{debt.balance|currency}}</td>
+                <td class="r {{ debt.projected_interest < 0 ? 'text-red' : '' }}">{{debt.projected_interest|currency}}</td>
+                <td class="remove no-print" ng-click="remove(debt)">Remove</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-pale-yellow no-print" ng-init="debt={'account_number':'', 'account_name':'', 'today_debt':'', 'monthly_due':'', 'yearly_payoff':'', 'interest_rate':''}" ng-hide="edits">
+                <td>&nbsp;</td>
+                <td>
+                    <input class="w3-input" type="text" ng-model="debt.account_number" placeholder="Debt Number" size="8" />
+                </td>
+                <td>
+                    <input class="w3-input" type="text" ng-model="debt.account_name" placeholder="Debt Name" size="8" />
+                </td>
+                <td class="r">
+                    <input class="r w3-input" type="text" ng-model="debt.today_debt" placeholder="0.00" size="8" />
+                </td>
+                <td class="r">
+                    <input class="r w3-input" type="text" ng-model="debt.monthly_due" placeholder="0.00" size="8" />
+                </td>
+                <td class="r">&nbsp;
+                    <!--input class="r w3-input" type="text" ng-model="debt.yearly_payoff" placeholder="0.00" size="8" /-->
+                </td>
+                <td class="r">
+                    <input class="r w3-input" type="text" ng-model="debt.interest_rate" placeholder="0.00" size="8" />
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="no-print" ng-click="add.debt('3FT32E5F-CF6F-4F4B-896F-986A8IU4EA7A', debt)"><span class="w3-btn w3-indigo">Add</span></td>
+            </tr>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="r">{{total.payoff|currency}}</td>
+                <td class="r">{{total.balance|currency}}</td>
+                <td class="r">{{total.projected_interest|currency}}</td>
+                <td class="no-print">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{income}}-->
+</div>

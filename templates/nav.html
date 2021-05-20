@@ -1,0 +1,29 @@
+<div class="menus w3-black">
+    <a class="w3-btn {{ activeUrl === 'forecast' ? 'w3-teal' : '' }}" ui-sref="forecast({year: $parent.year})"><img src="{{plugin_url + '/images/forecast.png'}}" /> Forecast</a>
+    <a class="w3-btn {{ activeUrl === 'variance' ? 'w3-teal' : '' }}" ui-sref="variables({year: $parent.year, month: '1'})"><img src="{{plugin_url + '/images/calendar.png'}}" /> Variance</a>
+    <a class="w3-btn" ui-sref-active="w3-teal" ui-sref="breakeven({year: $parent.year})"><img src="{{plugin_url + '/images/book.png'}}" /> Breakeven</a>
+    <a class="w3-btn" ui-sref-active="w3-teal" ui-sref="debtWorkBook({year: $parent.year})"><img src="{{plugin_url + '/images/debts.png'}}" /> Debt</a>
+    <!--a class="w3-btn" ui-sref-active="w3-teal" ui-sref="report({year: $parent.year})"><img src="images/report.png" /> Report</a-->
+
+    <div style="float:right;">Year:
+        <div style="display: inline-block;">
+            <select class="w3-select w3-black" ng-model="$parent.year" ng-change="$parent.setYear()" style="border: 0;">
+                <option ng-repeat="y in yearOptions" value="{{y}}" ng-selected="y == year">{{y}}</option>
+            </select>
+        </div>
+    <a class="w3-btn" onclick="window.print()"><img src="{{plugin_url + '/images/printer.png'}}" /> Print</a>
+    </div>
+    <style type="text/css">
+        @media print
+        {
+            body * { visibility: hidden; }
+            #wpbody * { visibility: visible; }
+            #wpbody { position: absolute; top: 0; left: 0;}
+            #angular_budget_body * { visibility: visible; }
+            #angular_budget_body { position: absolute; top: 0; left: 0;}
+        }
+        </style>
+        
+    <!--<a class="w3-btn" ui-sref-active="w3-teal" ui-sref="login">Login</a>-->
+    <!--<a class="w3-btn" ui-sref-active="w3-teal" ui-sref="admin">Admin</a>-->
+</div>

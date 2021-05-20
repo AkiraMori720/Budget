@@ -1,0 +1,230 @@
+<ng-include src="plugin_url + '/templates/nav.html'"></ng-include>
+
+<div class="w3-container w3-teal variable">
+    <div class="w3-col m4 l3 budget_title">
+        <h1>12 Month Forecast</h1>
+    </div>
+    <div class="w3-col m8" style="margin: 10px 0; float: right;">
+        <ul class="months w3-black" style="float: right;">
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 1})" class="w3-btn">Jan</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 2})" class="w3-btn">Feb</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 3})" class="w3-btn">Mar</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 4})" class="w3-btn">Apr</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 5})" class="w3-btn">May</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 6})" class="w3-btn">Jun</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 7})" class="w3-btn">Jul</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 8})" class="w3-btn">Aug</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 9})" class="w3-btn">Sep</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 10})" class="w3-btn">Oct</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 11})" class="w3-btn">Nov</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecastMonthly({year: year, 'month': 12})" class="w3-btn">Dec</a></li>
+            <li><a ui-sref-active="w3-white" ui-sref="forecast({year: year})" class="w3-btn">Total</a></li>
+        </ul>
+    </div>
+</div>
+<h2 class="no-print">
+    <div>
+        <button class="w3-btn w3-indigo" style="float: right;" ng-click="edits=!edits" title="Shows edit forms">
+            Edit Mode
+        </button>
+        <button class="w3-btn w3-red" style="float: right;" ng-click="recalculate('account_name')" title="If JS shows infinities...">
+            (Re)-Calculate
+        </button>
+    </div>
+</h2>
+
+<div class="company-wrapper">
+    <ng-include src="plugin_url + '/templates/company_name.html'"></ng-include>
+    <div class="table-heading-sort-note">
+        <h3>Ordinary Income/Expense</h3>
+        <i>(Click column heading to sort)</i>
+    </div>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th ng-click="sort('incomes', 'account_number')">Account Number</th>
+                <th ng-click="sort('incomes', 'account_name')">Account Name</th>
+                <th ng-click="sort('incomes', 'annual')" class="r">Annual Budget</th>
+                <th ng-click="sort('incomes', 'percentage')" class="r">% of Total Income</th>
+                <th class="no-print">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, income) in incomes">
+                <td>{{income.sn}}</td>
+                <td>{{income.account_number}}</td>
+                <td>{{income.account_name}}</td>
+                <td class="r {{ income.annual < 0 ? 'text-red' : '' }}">
+                    <span ng-hide="edits">{{income.annual|currency}}</span>
+                    <input class="r i w3-input" type="text" size="8" value="{{income.annual|currency}}" ng-show="edits" ng-model="income.annual"
+                        ng-blur="edit(income)" />
+                </td>
+                <td class="r {{ income.percentage < 0 ? 'text-red' : '' }}">{{income.percentage|number:2}}%</td>
+                <td class="remove no-print" ng-click="remove(income)">Remove</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-pale-yellow no-print" ng-init="income={'account_number':'', 'account_name':'', 'budget_amount':''}" ng-hide="edits">
+                <td>&nbsp;</td>
+                <td>
+                    <input class="w3-input" type="text" ng-model="income.account_number" placeholder="a/c number" size="8" />
+                    <!--div ng-click="sequence('B34B9FC0-3C61-429C-BB24-17C139108FF8', income)">Get Sequence!</div-->
+                </td>
+                <td><input class="w3-input" type="text" ng-model="income.account_name" placeholder="a/c name" size="8" /></td>
+                <td class="r"><input class="r w3-input" type="text" ng-model="income.budget_amount" placeholder="0.00" size="8" /></td>
+                <td>&nbsp;</td>
+                <td class="no-print" ng-click="add.budget('B34B9FC0-3C61-429C-BB24-17C139108FF8', income)"><span class="w3-btn w3-indigo">Add</span></td>
+            </tr>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total Income</td>
+                <td>&nbsp;</td>
+                <td class="r">{{income_summary.total|currency}}</td>
+                <td class="r">{{income_summary.percentage|number:2}}%</td>
+                <td class="no-print">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{income}}-->
+
+    <div class="table-heading-sort-note">
+        <h3>COGS (Cost of Goods Sold)</h3>
+        <i>(Click column heading to sort)</i>
+    </div>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th ng-click="sort('cogs', 'account_number')">Account Number</th>
+                <th ng-click="sort('cogs', 'account_name')">Account Name</th>
+                <th ng-click="sort('cogs', 'annual')" class="r">Annual Budget</th>
+                <th ng-click="sort('cogs', 'percentage')" class="r">% of Total COGS</th>
+                <th ng-click="sort('cogs', 'percentageTI')" class="r">% of Total Income</th>
+                <th class="no-print">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, cg) in cogs">
+                <td>{{i+1}}</td>
+                <td>{{cg.account_number}}</td>
+                <td>{{cg.account_name}}</td>
+                <td class="r {{ cg.annual < 0 ? 'text-red' : '' }}">
+                    <span ng-hide="edits">{{cg.annual|currency}}</span>
+                    <input class="r i w3-input" type="text" size="8" value="{{cg.annual|currency}}" ng-show="edits" ng-model="cg.annual" ng-blur="edit(cg)"
+                    />
+                </td>
+                <td class="r {{ cg.percentage < 0 ? 'text-red' : '' }}">{{cg.percentage|number:2}}%</td>
+                <td class="r {{ cg.percentageTI < 0 ? 'text-red' : '' }}">{{cg.percentageTI|number:2}}%</td>
+                <td class="remove no-print" ng-click="remove(cg)">Remove</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-pale-yellow no-print" ng-init="cog={'account_number':'', 'account_name':'', 'budget_amount':''}" ng-hide="edits">
+                <td>&nbsp;</td>
+                <td>
+                    <input class="w3-input" type="text" ng-model="cog.account_number" placeholder="a/c number" size="8" />
+                    <!--div ng-click="sequence('F8F32E5F-CF6F-4F4B-875F-986AAEE4EA7A', cog)">Get Sequence!</div-->
+                </td>
+                <td><input class="w3-input" type="text" ng-model="cog.account_name" placeholder="a/c name" size="8" />
+                </td>
+                <td class="r"><input class="r w3-input" type="text" ng-model="cog.budget_amount" placeholder="0.00" size="8" /></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="no-print" ng-click="add.budget('F8F32E5F-CF6F-4F4B-875F-986AAEE4EA7A', cog)"><span class="w3-btn w3-indigo">Add</span></td>
+            </tr>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total COGS</td>
+                <td>&nbsp;</td>
+                <td class="r">{{cogs_summary.total|currency}}</td>
+                <td class="r">{{cogs_summary.percentage|number:2}}%</td>
+                <td class="r">{{cogs_summary.percentageTI|number:2}}%</td>
+                <td class="no-print">&nbsp;</td>
+            </tr>
+            <tr class="w3-pale-blue">
+                <td>&nbsp;</td>
+                <td>Gross Profit</td>
+                <td>&nbsp;</td>
+                <td class="r">{{(income_summary.total - cogs_summary.total)|currency}}</td>
+                <td>&nbsp;</td>
+                <td class="r">{{((income_summary.total - cogs_summary.total)*100)/income_summary.total |number:2}}%</td>
+                <td class="no-print">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{cogs}}-->
+    <!--{{cogs_summary}}-->
+
+    <div class="table-heading-sort-note">
+        <h3>Expenses</h3>
+        <i>(Click column heading to sort)</i>
+    </div>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th ng-click="sort('expenditures', 'account_number')">Account Number</th>
+                <th ng-click="sort('expenditures', 'account_name')">Account Name</th>
+                <th ng-click="sort('expenditures', 'annual')" class="r">Annual Budget</th>
+                <th ng-click="sort('expenditures', 'percentage')" class="r">% of Total Expenses</th>
+                <th ng-click="sort('expenditures', 'percentageTI')" class="r">% of Total Income</th>
+                <th class="no-print">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, expenditure) in expenditures" class="{{ expenditure.type_name === 'Debts' ? 'debt-row-color' : ''}}">
+                <td>{{i+1}}</td>
+                <td>{{expenditure.account_number}}</td>
+                <td>{{expenditure.account_name}}</td>
+                <td class="r {{ expenditure.annual < 0 ? 'text-red' : '' }}">
+                    <span ng-hide="edits">{{expenditure.annual|currency}}</span>
+                    <input class="r i w3-input" type="text" size="8" value="{{expenditure.annual|currency}}" ng-show="edits" ng-model="expenditure.annual"
+                        ng-blur="edit(expenditure)" ng-readonly="{{expenditure.type_name === 'Debts' ? true : false}}" />
+                </td>
+                <td class="r {{ expenditure.percentage < 0 ? 'text-red' : '' }}">{{expenditure.percentage|number:2}}%</td>
+                <td class="r {{ expenditure.percentageTI < 0 ? 'text-red' : '' }}">{{expenditure.percentageTI|number:2}}%</td>
+                <td class="remove no-print" ng-click="remove(expenditure)">Remove</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-pale-yellow no-print" ng-init="expense={'account_number':'', 'account_name':'', 'budget_amount':''}" ng-hide="edits">
+                <td>&nbsp;</td>
+                <td>
+                    <input class="w3-input" type="text" ng-model="expense.account_number" placeholder="a/c number" size="8" />
+                    <!--div ng-click="sequence('FB9E9C53-BDF0-11E9-9854-A9BCB2474DAD', expense)">Get Sequence!</div-->
+                </td>
+                <td><input class="w3-input" type="text" ng-model="expense.account_name" placeholder="a/c name" size="8" /></td>
+                <td class="r"><input class="r w3-input" type="text" ng-model="expense.budget_amount" placeholder="0.00" size="8" /></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="no-print" ng-click="add.budget('FB9E9C53-BDF0-11E9-9854-A9BCB2474DAD', expense)"><span class="w3-btn w3-indigo">Add</span></td>
+            </tr>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total Expenses</td>
+                <td>&nbsp;</td>
+                <td class="r">{{expenditures_summary.total|currency}}</td>
+                <td class="r">{{expenditures_summary.percentage|number:2}}%</td>
+                <td class="r">{{expenditures_summary.percentageTI|number:2}}%</td>
+                <td class="no-print">&nbsp;</td>
+            </tr>
+            <tr class="w3-pale-blue">
+                <td>&nbsp;</td>
+                <td colspan="2">Net Ordinary Income</td>
+                <td class="r">{{(income_summary.total - cogs_summary.total - expenditures_summary.total)|currency}}</td>
+                <td class="r">
+                    <!-- {{expenditures_summary.percentage|number:2}}% -->
+                </td>
+                <td class="r">
+                    {{((income_summary.total - cogs_summary.total - expenditures_summary.total)*100/income_summary.total)|number:2}}%
+                </td>
+                <td class="no-print">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{expenditures}} -->
+    <!--{{expense}}-->
+    <!--{{expenditures_summary}}-->
+
+</div>

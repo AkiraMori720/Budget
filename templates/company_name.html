@@ -1,0 +1,5 @@
+<div class="view-edit-company-name">
+    <label>Name: </label>
+    <span ng-hide="edits">{{configs.company}}</span>
+    <input type="text" value="{{configs.company}}" ng-model="configs.company" ng-show="edits" ng-blur="editCompany(configs)"  />
+</div>

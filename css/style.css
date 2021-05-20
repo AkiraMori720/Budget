@@ -1,0 +1,95 @@
+* {
+  border: none;
+  outline: none;
+}
+
+.wrapper {
+  margin: 0 auto;
+}
+
+.menus .active {
+  color: red;
+  font-weight: bold;
+}
+
+tr {
+  cursor: pointer;
+}
+
+tbody tr td.remove:hover {
+  background-color: #ff9999 !important;
+}
+
+.r {
+  text-align: right !important;
+}
+
+input.i {
+  border: none;
+}
+
+.configs img.logo {
+  height: 100px;
+  width: 100px;
+}
+
+.configs img.banner {
+  height: 100px;
+  max-width: 850px;
+}
+
+.company-wrapper h3 {
+  margin-top: 20px;
+}
+
+.remove {
+  color: red !important;
+}
+.text-red {
+  color: #ff0000;
+}
+.table-heading-sort-note h3,
+.table-heading-sort-note i {
+  float: left;
+}
+.table-heading-sort-note i {
+  margin-top: 27px;
+  margin-left: 7px;
+}
+.view-edit-company-name input {
+  padding: 8px;
+  width: 300px;
+}
+.breakeven-company{margin-top: 10px;}
+.debt-row-color{color: #d16969;}
+.view-edit-company-name label{
+  font-size: 20px;
+  font-weight: bold;
+}
+.view-edit-company-name span{
+  font-size: 17px;
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+.center {
+  text-align: center !important;
+}
+
+.variable .months {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.variable .months li {
+  float: left;
+  margin-right: 3px;
+}
+
+.budget_title h1{
+  color: white !important;
+}

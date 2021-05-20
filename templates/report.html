@@ -1,0 +1,133 @@
+<ng-include src="'templates/nav.html'"></ng-include>
+
+<div class="w3-container w3-teal">
+    <h1>12 Month Forecast (Report)</h1>
+</div>
+
+<div class="company-wrapper">
+
+    <h3>Ordinary Income/Expense</h3>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th>Account Number</th>
+                <th>Account Name</th>
+                <th class="r">Annual Budget</th>
+                <th class="r">% of Total Income</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, income) in incomes">
+                <td>{{i+1}}</td>
+                <td>{{income.account_number}}</td>
+                <td>{{income.account_name}}</td>
+                <td class="r {{ income.annual < 0 ? 'text-red' : '' }}">{{income.annual|currency}}</td>
+                <td class="r {{ income.percentage < 0 ? 'text-red' : '' }}">{{income.percentage|number:2}}%</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total Income</td>
+                <td>&nbsp;</td>
+                <td class="r">{{income_summary.total|currency}}</td>
+                <td class="r">{{income_summary.percentage|number:2}}%</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{income}}-->
+
+
+    <h3>COGS (Cost of Goods Sold)</h3>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th>Account Number</th>
+                <th>Account Name</th>
+                <th class="r">Annual Budget</th>
+                <th class="r">% of Total COGS</th>
+                <th class="r">% of Total Income</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, cg) in cogs">
+                <td>{{i+1}}</td>
+                <td>{{cg.account_number}}</td>
+                <td>{{cg.account_name}}</td>
+                <td class="r {{ cg.annual < 0 ? 'text-red' : '' }}">{{cg.annual|currency}}</td>
+                <td class="r {{ cg.percentage < 0 ? 'text-red' : '' }}">{{cg.percentage|number:2}}%</td>
+                <td class="r {{ cg.percentageTI < 0 ? 'text-red' : '' }}">{{cg.percentageTI|number:2}}%</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total COGS</td>
+                <td>&nbsp;</td>
+                <td class="r">{{cogs_summary.total|currency}}</td>
+                <td class="r">{{cogs_summary.percentage|number:2}}%</td>
+                <td class="r">{{cogs_summary.percentageTI|number:2}}%</td>
+            </tr>
+            <tr class="w3-pale-blue">
+                <td>&nbsp;</td>
+                <td>Gross Profit</td>
+                <td>&nbsp;</td>
+                <td class="r">{{(income_summary.total - cogs_summary.total)|currency}}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{cogs}}-->
+    <!--{{cogs_summary}}-->
+
+
+    <h3>Expenses</h3>
+    <table class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+        <thead>
+            <tr class="w3-teal">
+                <th>S.N.</th>
+                <th>Account Number</th>
+                <th>Account Name</th>
+                <th class="r">Annual Budget</th>
+                <th class="r">% of Total Expenses</th>
+                <th class="r">% of Total Income</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(i, expenditure) in expenditures">
+                <td>{{i+1}}</td>
+                <td>{{expenditure.account_number}}</td>
+                <td>{{expenditure.account_name}}</td>
+                <td class="r {{ expenditure.annual < 0 ? 'text-red' : '' }}">{{expenditure.annual|currency}}</td>
+                <td class="r {{ expenditure.percentage < 0 ? 'text-red' : '' }}">{{expenditure.percentage|number:2}}%</td>
+                <td class="r {{ expenditure.percentageTI < 0 ? 'text-red' : '' }}">{{expenditure.percentageTI|number:2}}%</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="w3-black">
+                <td>&nbsp;</td>
+                <td>Total Expenses</td>
+                <td>&nbsp;</td>
+                <td class="r">{{expenditures_summary.total|currency}}</td>
+                <td class="r">{{expenditures_summary.percentage|number:2}}%</td>
+                <td class="r">{{expenditures_summary.percentageTI|number:2}}%</td>
+            </tr>
+            <tr class="w3-pale-blue">
+                <td>&nbsp;</td>
+                <td colspan="2">Net Ordinary Income</td>
+                <td class="r">{{(income_summary.total - cogs_summary.total - expenditures_summary.total)|currency}}</td>
+                <td class="r">
+                    <!-- {{expenditures_summary.percentage|number:2}}% -->
+                </td>
+                <td class="r">{{((income_summary.total - cogs_summary.total - expenditures_summary.total)*100/income_summary.total)|number:2}}%</td>
+            </tr>
+        </tfoot>
+    </table>
+    <!--{{expenditures}} -->
+    <!--{{expense}}-->
+    <!--{{expenditures_summary}}-->
+
+</div>

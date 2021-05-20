@@ -1,0 +1,92 @@
+<ng-include src="plugin_url + '/templates/nav.html'"></ng-include>
+
+<div class="w3-container w3-teal budget_title">
+    <h1>Break Even</h1>
+</div>
+<div class="breakeven-company">
+    <ng-include src="plugin_url + '/templates/company_name.html'"></ng-include>
+</div>
+<div class="container">
+    <table class="mt-3">
+        <tr>
+            <th colspan="2" class="center">BREAK EVEN</th>
+        </tr>
+        <tr>
+            <td>Total Revenue</td>
+            <td class="text-right {{ total_revenue < 0 ? 'text-red' : '' }}">{{ total_revenue | currency }}</td>
+        </tr>
+        <tr>
+            <td>Total Operating Expenses</td>
+            <td class="text-right {{ total_expenses < 0 ? 'text-red' : '' }}">{{ total_expenses | currency }}</td>
+        </tr>
+        <tr>
+            <td>Total Variable Costs (VC)</td>
+            <td class="text-right {{ total_cogs < 0 ? 'text-red' : '' }}">{{ total_cogs | currency }}</td>
+        </tr>
+    </table>
+    <table class="mt-3">
+        <tr>
+            <th>Break Even</th>
+            <th>Per Day</th>
+            <th>Overhead</th>
+        </tr>
+        <tr>
+            <td class="text-center {{ break_even() < 0 ? 'text-red' : '' }}">{{ break_even() | currency }}</td>
+            <td class="text-center {{ per_day() < 0 ? 'text-red' : '' }}">{{ per_day() | currency }}</td>
+            <td class="text-center {{ overhead() < 0 ? 'text-red' : '' }}">{{ overhead() | number:2 }}%</td>
+        </tr>
+    </table>
+    <table class="mt-3">
+        <tr>
+            <td>Total Gross Sales</td>
+            <td class="text-right {{ total_gross_sales() < 0 ? 'text-red' : '' }}">{{ total_gross_sales() | currency }}</td>
+        </tr>
+        <tr>
+            <td>Gross Profit</td>
+            <td class="text-right {{ gross_profit() < 0 ? 'text-red' : '' }}">{{ gross_profit() | currency }}</td>
+        </tr>
+        <tr>
+            <td>COGS</td>
+            <td class="text-right {{ t_cogs() < 0 ? 'text-red' : '' }}">{{ t_cogs() | currency }}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <!--tr>
+            <td>Total Var COGS&EX</td>
+            <td class="text-right">{{ total_var_cogs_ex() | currency }}</td>
+        </tr-->
+        <tr>
+            <td>Operating Expenses</td>
+            <td class="text-right {{ operating_expenses() < 0 ? 'text-red' : '' }}">{{ operating_expenses() | currency }}</td>
+        </tr>
+        <tr>
+            <td>Operating P/L</td>
+            <td class="text-right {{ operating_pl() < 0 ? 'text-red' : '' }}">{{ operating_pl() | currency }}</td>
+        </tr>
+    </table>
+    <div class="mt-3">&nbsp;</div>
+</div>
+
+<style>
+    .container {
+        width: 900px;
+        margin: 0 auto;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .mt-3 {
+        margin-top: 2rem;
+    }
+</style>

@@ -1,0 +1,29 @@
+<div class="w3-container w3-teal">
+    <h1>{{configs.company}}</h1>
+</div>
+
+<h2>Login</h2>
+
+<fieldset>
+    <legend>User Login</legend>
+    <form method="post" action="login.php" autocomplete="off">
+        <div>
+            <div>Username:</div>
+            <div>
+                <input type="text" name="login[username]" value="" ng-model="login.username" placeholder="username" />
+            </div>
+        </div>
+        <div>
+            <div>Password:</div>
+            <div>
+                <input type="password" name="login[password]" value="" ng-model="login.password" placeholder="password" />
+            </div>
+        </div>
+        <div>
+            <span class="w3-btn w3-indigo" ng-click="login()">Login</span>
+            <!--<a href="register.php">Register</a>-->
+        </div>
+    </form>
+</fieldset>
+
+{{ login }}
